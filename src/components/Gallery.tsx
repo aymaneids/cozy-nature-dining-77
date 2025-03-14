@@ -1,7 +1,5 @@
 
-import React, { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
-import { X } from "lucide-react";
+import React from "react";
 
 const images = [
   {
@@ -47,8 +45,6 @@ const images = [
 ];
 
 const Gallery: React.FC = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
   return (
     <section id="gallery" className="py-20 bg-nature-50">
       <div className="container mx-auto px-4 md:px-6">
@@ -65,7 +61,6 @@ const Gallery: React.FC = () => {
               key={index}
               className="group relative overflow-hidden rounded-lg cursor-pointer animate-scale-in"
               style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => setSelectedImage(image.url)}
             >
               <div className="aspect-square overflow-hidden">
                 <img
@@ -84,27 +79,6 @@ const Gallery: React.FC = () => {
             </div>
           ))}
         </div>
-
-        {/* Image Modal */}
-        <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-            <div className="relative max-w-3xl w-full mx-auto">
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute -top-12 right-0 text-white hover:text-gray-300 focus:outline-none"
-              >
-                <X className="h-8 w-8" />
-              </button>
-              {selectedImage && (
-                <img
-                  src={selectedImage}
-                  alt="Gallery image"
-                  className="w-full h-auto rounded-lg"
-                />
-              )}
-            </div>
-          </div>
-        </Dialog>
       </div>
     </section>
   );
