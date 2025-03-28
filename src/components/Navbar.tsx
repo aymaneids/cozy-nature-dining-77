@@ -3,24 +3,19 @@ import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface NavbarProps {
   transparent?: boolean;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  // Toggle mobile menu
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  // Close mobile menu
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -34,19 +29,6 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     };
   }, []);
 
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
   const navLinks = [
     { name: "Home", href: "#home" },
     { name: "Menu", href: "#menu" },
@@ -55,6 +37,10 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     { name: "Reviews", href: "#testimonials" },
     { name: "Contact", href: "#contact" },
   ];
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
 
   return (
     <header
@@ -96,47 +82,44 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
             Reserve a Table
           </a>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden text-nature-800 hover:text-nature-600 focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-cream-50 z-40 md:hidden">
-          <div className="flex flex-col h-full pt-20 px-6 pb-8 overflow-y-auto">
-            <nav className="flex flex-col space-y-6 items-center">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-xl font-medium text-nature-800 hover:text-accent"
-                  onClick={closeMenu}
+          {/* Mobile Menu - Using shadcn/ui Sheet component */}
+          <div className="md:hidden">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="text-nature-800 hover:text-nature-600 hover:bg-transparent focus:outline-none"
                 >
-                  {link.name}
-                </a>
-              ))}
-              <a
-                href="#reservation"
-                className="btn-primary w-full text-center mt-4"
-                onClick={closeMenu}
-              >
-                Reserve a Table
-              </a>
-            </nav>
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="pt-10 h-[80vh]">
+                <nav className="flex flex-col space-y-6 items-center">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      className="text-xl font-medium text-nature-800 hover:text-accent"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                  <a
+                    href="#reservation"
+                    className="btn-primary w-full text-center mt-4"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Reserve a Table
+                  </a>
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 };
