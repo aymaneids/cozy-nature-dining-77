@@ -40,6 +40,11 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     { name: "Contact", href: "#contact" },
   ];
 
+  // Handle clicking on mobile menu items
+  const handleMobileMenuItemClick = () => {
+    setIsOpen(false); // Close the mobile menu when an item is clicked
+  };
+
   return (
     <header
       className={cn(
@@ -53,8 +58,8 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
         <div className="flex items-center justify-between">
           <a href="#" className="flex items-center">
             <span className="text-xl md:text-2xl font-serif font-medium text-nature-900">
-              Cozy Nature
-              <span className="text-accent">Dining</span>
+              212 Mini Mall/
+              <span className="text-accent">Coffee Bean</span>
             </span>
           </a>
 
@@ -107,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
               key={link.name}
               href={link.href}
               className="text-xl font-medium nav-link"
-              onClick={() => setIsOpen(false)}
+              onClick={handleMobileMenuItemClick}
             >
               {link.name}
             </a>
@@ -115,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
           <a
             href="#reservation"
             className="btn-primary w-full justify-center mt-4"
-            onClick={() => setIsOpen(false)}
+            onClick={handleMobileMenuItemClick}
           >
             Reserve a Table
           </a>

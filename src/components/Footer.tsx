@@ -10,8 +10,8 @@ const Footer: React.FC = () => {
           {/* Logo & Description */}
           <div className="md:col-span-2">
             <h3 className="text-2xl font-serif font-medium mb-4">
-              Cozy Nature
-              <span className="text-accent">Dining</span>
+              212 Mini Mall/
+              <span className="text-accent">Coffee Bean</span>
             </h3>
             <p className="text-cream-300 max-w-md">
               Experience the perfect blend of rustic charm and culinary excellence
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           {/* Copyright */}
           <p className="text-cream-400 text-sm">
-            © {new Date().getFullYear()} Cozy Nature Dining. All rights reserved.
+            © {new Date().getFullYear()} 212 Mini Mall/Coffee Bean. All rights reserved.
           </p>
 
           {/* Social Links */}
