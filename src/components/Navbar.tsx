@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface NavbarProps {
   transparent?: boolean;
@@ -11,18 +12,20 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Toggle mobile menu
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  // Close mobile menu
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      const offset = window.scrollY;
-      if (offset > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -31,16 +34,16 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     };
   }, []);
 
-  // Add effect to prevent scrolling when menu is open
+  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    
+
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -53,11 +56,6 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     { name: "Contact", href: "#contact" },
   ];
 
-  // Handle clicking on mobile menu items
-  const handleMobileMenuItemClick = () => {
-    setIsOpen(false); // Close the mobile menu when an item is clicked
-  };
-
   return (
     <header
       className={cn(
@@ -69,6 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
+          {/* Logo */}
           <a href="#" className="flex items-center">
             <span className="text-xl md:text-2xl font-serif font-medium text-nature-900">
               212 Mini Mall/
@@ -89,7 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
             ))}
           </nav>
 
-          {/* Reservation Button */}
+          {/* Reservation Button (Desktop) */}
           <a
             href="#reservation"
             className="hidden md:inline-flex btn-primary"
@@ -112,25 +111,25 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 bg-cream-50 z-40 md:hidden overflow-y-auto pt-20">
-          <div className="container mx-auto px-4 py-6">
+        <div className="fixed inset-0 bg-cream-50 z-40 md:hidden">
+          <div className="flex flex-col h-full pt-20 px-6 pb-8 overflow-y-auto">
             <nav className="flex flex-col space-y-6 items-center">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-xl font-medium nav-link"
-                  onClick={handleMobileMenuItemClick}
+                  className="text-xl font-medium text-nature-800 hover:text-accent"
+                  onClick={closeMenu}
                 >
                   {link.name}
                 </a>
               ))}
               <a
                 href="#reservation"
-                className="btn-primary w-full justify-center mt-4"
-                onClick={handleMobileMenuItemClick}
+                className="btn-primary w-full text-center mt-4"
+                onClick={closeMenu}
               >
                 Reserve a Table
               </a>
