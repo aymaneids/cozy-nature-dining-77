@@ -31,6 +31,19 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     };
   }, []);
 
+  // Add effect to prevent scrolling when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const navLinks = [
     { name: "Home", href: "#home" },
     { name: "Menu", href: "#menu" },
@@ -100,32 +113,31 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
       </div>
 
       {/* Mobile Menu */}
-      <div
-        className={cn(
-          "fixed inset-0 bg-cream-50 z-40 pt-20 pb-6 px-4 md:hidden transform transition-transform duration-300 ease-in-out",
-          isOpen ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <nav className="flex flex-col space-y-6 items-center">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-xl font-medium nav-link"
-              onClick={handleMobileMenuItemClick}
-            >
-              {link.name}
-            </a>
-          ))}
-          <a
-            href="#reservation"
-            className="btn-primary w-full justify-center mt-4"
-            onClick={handleMobileMenuItemClick}
-          >
-            Reserve a Table
-          </a>
-        </nav>
-      </div>
+      {isOpen && (
+        <div className="fixed inset-0 bg-cream-50 z-40 md:hidden overflow-y-auto pt-20">
+          <div className="container mx-auto px-4 py-6">
+            <nav className="flex flex-col space-y-6 items-center">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-xl font-medium nav-link"
+                  onClick={handleMobileMenuItemClick}
+                >
+                  {link.name}
+                </a>
+              ))}
+              <a
+                href="#reservation"
+                className="btn-primary w-full justify-center mt-4"
+                onClick={handleMobileMenuItemClick}
+              >
+                Reserve a Table
+              </a>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
